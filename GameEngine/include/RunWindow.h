@@ -8,7 +8,7 @@ public:
     RunWindow();
     int Run();
 private:
-    int WINDOW_WIDTH{640};
-    int WINDOW_HEIGHT{480};
+    int WINDOW_WIDTH;
+    int WINDOW_HEIGHT;
 };
 

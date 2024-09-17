@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-RunWindow::RunWindow()
+RunWindow::RunWindow() : WINDOW_WIDTH{640}, WINDOW_HEIGHT{480}
 {
 }
 

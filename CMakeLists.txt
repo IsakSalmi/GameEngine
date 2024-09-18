@@ -4,10 +4,11 @@ project(GameEngine VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
-include_directories(GameEngine/include)
+include_directories(GameEngine/include GameEngine/include/Renderer)
 file(GLOB SOURCES "GameEngine/src/*.cpp")
+file(GLOB RENDERER "GameEngine/src/Renderer/*.cpp")
 
-add_executable(GameEngine GameEngine/Main.cpp ${SOURCES})
+add_executable(GameEngine GameEngine/Main.cpp ${SOURCES} ${RENDERER})
 target_link_libraries(GameEngine SDL2main SDL2 SDL2_image)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <utility>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 namespace Rend
 {

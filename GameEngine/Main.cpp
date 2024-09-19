@@ -1,6 +1,7 @@
-#include "Obstacle.h"
+#include "Physics/Obstacle.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/RenderObject.h"
+#include "Entity/Entity.h"
 
 int main(int argc, char* args[])
 {
@@ -23,6 +24,10 @@ int main(int argc, char* args[])
     std::unique_ptr<Rend::RenderObject> temp2 = std::make_unique<Rend::RenderObject>();
     temp2->setPos(20,300);
     rend.addObjectToRender(std::move(temp2));
+
+    std::unique_ptr<Ent::Entity> temp3 = std::make_unique<Ent::Entity>();
+    rend.addObjectToRender(std::move(temp3));
+
     while (!exit)
     {
         while (SDL_PollEvent(&eventData))

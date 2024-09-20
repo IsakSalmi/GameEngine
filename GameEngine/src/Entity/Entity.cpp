@@ -1,10 +1,10 @@
 #include "Entity.h"
-#
+
 
 using namespace std;
 
 namespace Ent {
-    Entity::Entity() : m_positionXY({0, 0}), m_widthAndHeight({50, 50}), m_colour({255, 255, 255, 255})
+    Entity::Entity() : m_positionXY({20, 50}), m_widthAndHeight({100, 50}), m_colour({0, 255, 0, 255})
     {
     }
 
@@ -23,7 +23,20 @@ namespace Ent {
 
     void Entity::setPoistionXY(pair<int, int> positionXY) 
     {
-        this->m_positionXY = positionXY;
+        std::cout << "Correct function" << std::endl;
+        m_positionXY = positionXY;
+    }
+    
+    void Entity::moveXY(pair<int, int> positionXY) 
+    {
+        this->m_positionXY.first += positionXY.first;
+        this->m_positionXY.second += positionXY.second;
+    }
+    
+    void Entity::moveXY(int x, int y) 
+    {
+        m_positionXY.first = 10;
+        m_positionXY.second = 10;
     }
 
     void Entity::setWidhtAndHeight(pair<int, int> widthAndHeight)

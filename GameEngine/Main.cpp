@@ -2,6 +2,12 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/RenderObject.h"
 #include "Entity/Entity.h"
+#include <iostream>
+
+
+const int FPS = 60;
+const int frameDelay = 1000 / FPS;
+
 
 int main(int argc, char* args[])
 {
@@ -12,34 +18,47 @@ int main(int argc, char* args[])
     bool exit = false;
     SDL_Event eventData;
 
-    rend.renderBackground(255,0,0,255);
-    std::unique_ptr<Rend::RenderObject> temp = std::make_unique<Rend::RenderObject>();
-    temp->setPos(20,20);
-    rend.addObjectToRender(std::move(temp));
 
-    std::unique_ptr<Rend::RenderObject> temp1 = std::make_unique<Rend::RenderObject>();
-    temp1->setPos(300,20);
-    rend.addObjectToRender(std::move(temp1));
 
-    std::unique_ptr<Rend::RenderObject> temp2 = std::make_unique<Rend::RenderObject>();
-    temp2->setPos(20,300);
-    rend.addObjectToRender(std::move(temp2));
 
-    std::unique_ptr<Ent::Entity> temp3 = std::make_unique<Ent::Entity>();
-    rend.addObjectToRender(std::move(temp3));
 
-    while (!exit)
+    std::shared_ptr<Ent::Entity> temp3 = std::make_shared<Ent::Entity>();
+    rend.addObjectToRender(temp3);
+
+    bool running = true;
+    Uint32 frameStart;
+    int frameTime;
+    int frameCount = 0;
+    while (running)
     {
+        rend.renderBackground(255,0,0,255);
+        frameStart = SDL_GetTicks();  // Get the number of milliseconds since the SDL library was initialized
+
+        // Event handling
         while (SDL_PollEvent(&eventData))
         {
-            switch (eventData.type)
+            if (eventData.type == SDL_QUIT)
             {
-            case SDL_QUIT:
-                exit = true;
+                running = false;
                 break;
             }
         }
+
+        // Frame time control
+        frameTime = SDL_GetTicks() - frameStart;  // Calculate how long this frame took
+
+        // If the frame completed too quickly, delay to maintain the frame rate
+        printf("Started\n");
+
         rend.renderObject();
+        printf("Rendered\n");
+        temp3->moveXY(std::pair<int, int>(1, 0));
+        frameCount++;
+        printf("frameCount: %d\n", frameCount);
+        SDL_Delay(frameDelay - frameTime);  // Delay to fill the remaining time of the frame
+            
+        if (frameDelay > frameTime)
+            SDL_Delay(frameDelay - frameTime); 
     }
     return 0;
 }

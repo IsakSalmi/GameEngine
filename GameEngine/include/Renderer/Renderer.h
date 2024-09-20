@@ -14,6 +14,7 @@ public:
     Renderer(int32_t width, int32_t hight);
     ~Renderer();
 
+
     void renderBackground(int32_t red, int32_t green, int32_t blue, int32_t alpha) const;
     void renderObject();
     void addObjectToRender(std::shared_ptr<IRenderObject> renderObject); 

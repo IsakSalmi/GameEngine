@@ -39,13 +39,15 @@ void Renderer::addObjectToRender(std::shared_ptr<IRenderObject> renderObject)
     m_objectToRender.push_back(std::move(renderObject));
 }
 
+
 void Renderer::renderRect(const std::shared_ptr<IRenderObject> &object) const {
     std::pair<int, int> pos = object->getPosOfObject();
     std::pair<int, int> widthAndHight = object->getWidthAndhight();
     SDL_Color color = object->getColour();
     SDL_Rect rec = {pos.first,
                     pos.second,
-                    widthAndHight.first, widthAndHight.second};
+                    widthAndHight.first, 
+                    widthAndHight.second};
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(m_renderer, &rec);
 }

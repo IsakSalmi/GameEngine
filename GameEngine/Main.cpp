@@ -19,13 +19,14 @@ int main(int argc, char* args[])
     bool exit = false;
     SDL_Event eventData;
 
+
     std::shared_ptr<Ent::Entity> temp1 = std::make_shared<Ent::Entity>();
     rend.addObjectToRender(temp1);
     std::shared_ptr<Ent::Entity> temp2 = std::make_shared<Ent::Entity>();
     temp2->setWidhtAndHeight({30, 500});
     temp2->setPoistionXY({500,50});
     rend.addObjectToRender(temp2);
-
+  
     std::shared_ptr<Ent::Entity> temp3 = std::make_shared<Ent::Entity>();
     temp3->setWidhtAndHeight({30, 500});
     temp3->setPoistionXY({0,50});

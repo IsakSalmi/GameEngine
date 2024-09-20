@@ -4,7 +4,7 @@
 using namespace std;
 
 namespace Ent {
-    Entity::Entity() : m_positionXY({20, 50}), m_widthAndHeight({100, 50}), m_colour({0, 255, 0, 255})
+    Entity::Entity() : m_positionXY({640/2, 480/2}), m_widthAndHeight({100, 50}), m_colour({0, 255, 0, 255})
     {
     }
 

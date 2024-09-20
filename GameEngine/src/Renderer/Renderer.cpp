@@ -1,10 +1,9 @@
 #include "Renderer/Renderer.h"
 
-
 namespace Rend
 {
 using namespace std;
-Renderer::Renderer(int width, int hight)
+Renderer::Renderer(int32_t width, int32_t hight)
 : m_width(width)
 , m_hight(hight)
 , m_window(nullptr)
@@ -39,30 +38,85 @@ Renderer::~Renderer()
 
 void Renderer::addObjectToRender(std::shared_ptr<IRenderObject> renderObject)
 {
-    objectToRender.push_back(std::move(renderObject));
+    m_objectToRender.push_back(std::move(renderObject));
 }
 
-void Renderer::renderRect(SDL_Rect rec, SDL_Color color)
+void Renderer::renderRect(std::shared_ptr<IRenderObject> object)
 {
+    SDL_RenderClear(m_renderer);
+    std::pair<int, int> pos = object->getPosOfObject();
+    std::pair<int, int> widthAndHight = object->getWidthAndhight();
+    SDL_Color color = object->getColour();
+    SDL_Rect rec = {pos.first - widthAndHight.first/2, 
+                    pos.second - widthAndHight.second/2, 
+                    widthAndHight.first, widthAndHight.second};
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(m_renderer, &rec);
 }
 
-void Renderer::renderObject()
+void Renderer::renderImage(std::shared_ptr<IRenderObject> object)
 {
-    for(int index = 0; index <  objectToRender.size(); index++)
+    std::string imagePath = object->getImagePath();
+    texture = IMG_LoadTexture(m_renderer,imagePath.c_str());
+
+    if (texture == nullptr)
     {
-        pair<int, int> pos = objectToRender[index]->getPosOfObject();
-        pair<int, int> widthAndHight = objectToRender[index]->getWidthAndhight();
-        SDL_Color color = objectToRender[index]->getColour();
-        SDL_Rect r = { pos.first, pos.second, widthAndHight.first, widthAndHight.second };
-        renderRect(r,color);
+        std::cout << "Failed to load texture from " << imagePath << "! SDL_image Error: " << IMG_GetError() << std::endl;
+        return;
     }
-    SDL_RenderPresent(m_renderer);
-    SDL_RenderClear(m_renderer);
+    std::pair<int, int> pos = object->getPosOfObject();
+    std::pair<int, int> size = object->getWidthAndhight();
+    SDL_Rect renderQuad = { pos.first - size.first/2, 
+                            pos.second - size.second/2, 
+                            size.first, 
+                            size.second };
+    SDL_RenderCopy(m_renderer, texture, nullptr, &renderQuad);
+    SDL_DestroyTexture(texture);
 }
 
-void Renderer::renderBackground(int red, int green, int blue, int alpha)
+void Renderer::renderObject()
+{   
+    SDL_RenderClear(m_renderer);
+    for(int32_t index = 0; index <  m_objectToRender.size(); index++)
+    {
+        renderThisObject(m_objectToRender[index]);
+    }
+    SDL_RenderPresent(m_renderer);
+}
+
+void Renderer::renderThisObject(std::shared_ptr<IRenderObject> object)
+{
+    RenderType type = object->getRenderType();
+    switch (type)
+    {
+    case RenderType::Rectangle:
+        renderRect(object);
+        break;
+    case RenderType::image:
+        renderImage(object);
+        break;
+    default:
+        break;
+    }
+}
+
+void Renderer::removeObject(const std::string& ID)
+{
+    auto it = m_objectToRender.begin();
+    
+    while (it < m_objectToRender.end())
+    {
+        if ((*it)->getID() == ID)
+        {
+            it = m_objectToRender.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+void Renderer::renderBackground(int32_t red, int32_t green, int32_t blue, int32_t alpha)
 {
     SDL_SetRenderDrawColor(m_renderer, red, green, blue, alpha);
     SDL_RenderClear(m_renderer);

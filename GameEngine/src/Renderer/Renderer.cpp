@@ -3,24 +3,22 @@
 namespace Rend
 {
 using namespace std;
-Renderer::Renderer(int32_t width, int32_t hight)
-: m_width(width)
-, m_hight(hight)
-, m_window(nullptr)
-, m_renderer(nullptr)
-{
-    m_window = SDL_CreateWindow("SDL Window",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,m_width,m_hight,SDL_WINDOW_ALLOW_HIGHDPI);
-    if (m_window == nullptr)
-    {
+Renderer::Renderer(const int32_t width, int32_t hight)
+    : m_window(nullptr)
+      , m_renderer(nullptr)
+      , texture(nullptr)
+      , m_width(width), m_hight(hight) {
+    m_window = SDL_CreateWindow("SDL Window",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED, m_width, m_hight,
+                                SDL_WINDOW_ALLOW_HIGHDPI);
+    if (m_window == nullptr) {
         SDL_Log("SDL_CreateWindow Error: %s\n", SDL_GetError());
     }
 
-    m_renderer = SDL_CreateRenderer(m_window,-1,SDL_RENDERER_ACCELERATED);
-    if (m_renderer == nullptr)
-    {
+    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
+    if (m_renderer == nullptr) {
         SDL_Log("SDL_CreateRenderer Error: %s\n", SDL_GetError());
     }
-    SDL_SetRenderDrawBlendMode(m_renderer,SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
 }
 
 Renderer::~Renderer()
@@ -41,20 +39,18 @@ void Renderer::addObjectToRender(std::shared_ptr<IRenderObject> renderObject)
     m_objectToRender.push_back(std::move(renderObject));
 }
 
-void Renderer::renderRect(std::shared_ptr<IRenderObject> object)
-{
-    SDL_RenderClear(m_renderer);
+void Renderer::renderRect(const std::shared_ptr<IRenderObject> &object) const {
     std::pair<int, int> pos = object->getPosOfObject();
     std::pair<int, int> widthAndHight = object->getWidthAndhight();
     SDL_Color color = object->getColour();
-    SDL_Rect rec = {pos.first - widthAndHight.first/2, 
-                    pos.second - widthAndHight.second/2, 
+    SDL_Rect rec = {pos.first,
+                    pos.second,
                     widthAndHight.first, widthAndHight.second};
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(m_renderer, &rec);
 }
 
-void Renderer::renderImage(std::shared_ptr<IRenderObject> object)
+void Renderer::renderImage(const std::shared_ptr<IRenderObject>& object)
 {
     std::string imagePath = object->getImagePath();
     texture = IMG_LoadTexture(m_renderer,imagePath.c_str());
@@ -66,8 +62,8 @@ void Renderer::renderImage(std::shared_ptr<IRenderObject> object)
     }
     std::pair<int, int> pos = object->getPosOfObject();
     std::pair<int, int> size = object->getWidthAndhight();
-    SDL_Rect renderQuad = { pos.first - size.first/2, 
-                            pos.second - size.second/2, 
+    SDL_Rect renderQuad = { pos.first,
+                            pos.second,
                             size.first, 
                             size.second };
     SDL_RenderCopy(m_renderer, texture, nullptr, &renderQuad);
@@ -77,9 +73,9 @@ void Renderer::renderImage(std::shared_ptr<IRenderObject> object)
 void Renderer::renderObject()
 {   
     SDL_RenderClear(m_renderer);
-    for(int32_t index = 0; index <  m_objectToRender.size(); index++)
+    for(const auto & index : m_objectToRender)
     {
-        renderThisObject(m_objectToRender[index]);
+        renderThisObject(index);
     }
     SDL_RenderPresent(m_renderer);
 }
@@ -89,10 +85,10 @@ void Renderer::renderThisObject(std::shared_ptr<IRenderObject> object)
     RenderType type = object->getRenderType();
     switch (type)
     {
-    case RenderType::Rectangle:
+    case Rectangle:
         renderRect(object);
         break;
-    case RenderType::image:
+    case image:
         renderImage(object);
         break;
     default:
@@ -116,8 +112,7 @@ void Renderer::removeObject(const std::string& ID)
         }
     }
 }
-void Renderer::renderBackground(int32_t red, int32_t green, int32_t blue, int32_t alpha)
-{
+void Renderer::renderBackground(const int32_t red, const int32_t green, const int32_t blue, const int32_t alpha) const {
     SDL_SetRenderDrawColor(m_renderer, red, green, blue, alpha);
     SDL_RenderClear(m_renderer);
 }

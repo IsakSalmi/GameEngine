@@ -68,4 +68,9 @@ namespace Ent {
     {
        return this->m_colour;
     }
+
+    SDL_Rect Entity::getRect()
+    {
+        return SDL_Rect({m_positionXY.first, m_positionXY.second, m_widthAndHeight.first, m_widthAndHeight.second});
+    }
 }

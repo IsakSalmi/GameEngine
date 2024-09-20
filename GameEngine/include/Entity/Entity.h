@@ -15,6 +15,7 @@ class Entity : public Rend::IRenderObject {
         void moveXY(int x, int y);
         void setWidhtAndHeight(std::pair<int, int> widthAndHeight);
         void setColour(SDL_Color colour);
+        SDL_Rect getRect();
 
         std::pair<int, int> getPosOfObject();
         std::pair<int, int> getWidthAndhight();

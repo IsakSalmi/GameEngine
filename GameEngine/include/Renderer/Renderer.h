@@ -16,7 +16,7 @@ public:
 
     void renderBackground(int red, int green, int blue, int alpha);
     void renderObject();
-    void addObjectToRender(std::unique_ptr<IRenderObject> renderObject); 
+    void addObjectToRender(std::shared_ptr<IRenderObject> renderObject); 
 
 private:
     void renderRect(SDL_Rect rec, SDL_Color color);
@@ -26,7 +26,7 @@ private:
     const int m_width;
     const int m_hight;
 
-    std::vector<std::unique_ptr<IRenderObject>> objectToRender;
+    std::vector<std::shared_ptr<IRenderObject>> objectToRender;
 };
 
 } // namespace Rend

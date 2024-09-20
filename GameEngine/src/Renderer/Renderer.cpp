@@ -37,7 +37,7 @@ Renderer::~Renderer()
     SDL_Quit();
 }
 
-void Renderer::addObjectToRender(std::unique_ptr<IRenderObject> renderObject)
+void Renderer::addObjectToRender(std::shared_ptr<IRenderObject> renderObject)
 {
     objectToRender.push_back(std::move(renderObject));
 }
@@ -59,6 +59,7 @@ void Renderer::renderObject()
         renderRect(r,color);
     }
     SDL_RenderPresent(m_renderer);
+    SDL_RenderClear(m_renderer);
 }
 
 void Renderer::renderBackground(int red, int green, int blue, int alpha)

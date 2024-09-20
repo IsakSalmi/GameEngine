@@ -18,10 +18,6 @@ int main(int argc, char* args[])
     bool exit = false;
     SDL_Event eventData;
 
-
-
-
-
     std::shared_ptr<Ent::Entity> temp3 = std::make_shared<Ent::Entity>();
     rend.addObjectToRender(temp3);
 
@@ -42,21 +38,18 @@ int main(int argc, char* args[])
                 running = false;
                 break;
             }
+            if (eventData.type == SDL_MOUSEBUTTONUP) {
+                if (eventData.button.state == SDL_RELEASED) {
+                    rend.removeObject("nullID");
+                }
+            }
         }
 
-        // Frame time control
         frameTime = SDL_GetTicks() - frameStart;  // Calculate how long this frame took
 
-        // If the frame completed too quickly, delay to maintain the frame rate
-        printf("Started\n");
-
         rend.renderObject();
-        printf("Rendered\n");
-        temp3->moveXY(std::pair<int, int>(1, 0));
         frameCount++;
-        printf("frameCount: %d\n", frameCount);
         SDL_Delay(frameDelay - frameTime);  // Delay to fill the remaining time of the frame
-            
         if (frameDelay > frameTime)
             SDL_Delay(frameDelay - frameTime); 
     }

@@ -43,12 +43,11 @@ void Renderer::addObjectToRender(std::shared_ptr<IRenderObject> renderObject)
 
 void Renderer::renderRect(std::shared_ptr<IRenderObject> object)
 {
-    SDL_RenderClear(m_renderer);
     std::pair<int, int> pos = object->getPosOfObject();
     std::pair<int, int> widthAndHight = object->getWidthAndhight();
     SDL_Color color = object->getColour();
-    SDL_Rect rec = {pos.first - widthAndHight.first/2, 
-                    pos.second - widthAndHight.second/2, 
+    SDL_Rect rec = {pos.first, 
+                    pos.second, 
                     widthAndHight.first, widthAndHight.second};
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(m_renderer, &rec);
@@ -66,8 +65,8 @@ void Renderer::renderImage(std::shared_ptr<IRenderObject> object)
     }
     std::pair<int, int> pos = object->getPosOfObject();
     std::pair<int, int> size = object->getWidthAndhight();
-    SDL_Rect renderQuad = { pos.first - size.first/2, 
-                            pos.second - size.second/2, 
+    SDL_Rect renderQuad = { pos.first, 
+                            pos.second, 
                             size.first, 
                             size.second };
     SDL_RenderCopy(m_renderer, texture, nullptr, &renderQuad);
@@ -118,8 +117,8 @@ void Renderer::removeObject(const std::string& ID)
 }
 void Renderer::renderBackground(int32_t red, int32_t green, int32_t blue, int32_t alpha)
 {
-    SDL_SetRenderDrawColor(m_renderer, red, green, blue, alpha);
     SDL_RenderClear(m_renderer);
+    SDL_SetRenderDrawColor(m_renderer, red, green, blue, alpha);
 }
 
 } // namespace Rend

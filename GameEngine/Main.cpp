@@ -4,6 +4,7 @@
 #include "Utility/ObjectUtility.h"
 #include "Utility/ObjectUtility.h"
 #include "Entity/Entity.h"
+#include "Entity/EntityManager.h"
 #include <iostream>
 
 int main(int argc, char* args[])
@@ -32,14 +33,20 @@ int main(int argc, char* args[])
     Uint32 frameStart;
     int frameTime;
     int frameCount = 0;
-    const int FPS = 30;
+    const int FPS = 200;
     const int frameDelay = 1000 / FPS;
     Uint32 lastTime = SDL_GetTicks();  
-    Uint32 fpsTimer = 0;       
+    Uint32 fpsTimer = 0;
 
     Utility::ObjectUtility utility;
+    
+    std::pair<int, int> mittPar = {20, 20};
+    Entman::EntityManager entMan = Entman::EntityManager();
+    // entMan.createEntity(mittPar);
+    entMan.checkAllCollision();
 
-    int32_t dir = 5;
+
+    int32_t dir = 1;
     while (running)
     {
         frameStart = SDL_GetTicks();
@@ -60,23 +67,13 @@ int main(int argc, char* args[])
             }
         }
 
-        if(utility.checkCollision(temp1->getRect(), temp2->getRect())){
-            dir = -5;
-        }
-        else if (utility.checkCollision(temp1->getRect(), temp3->getRect())) {
-            dir = 5;
-        }
-
-        temp1->moveXY({dir,-1});
-
-        if(utility.checkCollision(temp1->getRect(), temp2->getRect())){
-            dir = -5;
-        }
-        else if (utility.checkCollision(temp1->getRect(), temp3->getRect())) {
-            dir = 5;
+        if(utility.checkCollision(temp1->getRect(), temp2->getRect()) ||
+            utility.checkCollision(temp1->getRect(), temp3->getRect()))
+        {
+            dir *= -1;
         }
 
-        temp1->moveXY({dir,-1});
+        temp1->moveXY({dir, 0});
         rend.renderObject();
 
         frameTime = SDL_GetTicks() - frameStart;

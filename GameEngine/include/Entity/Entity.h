@@ -1,9 +1,10 @@
 #pragma once
 #include <iostream>
 #include "Renderer/IRenderObject.h"
+#include "Physics/IPhysicsObject.h"
 
 namespace Ent {
-class Entity : public Rend::IRenderObject {
+class Entity : public Rend::IRenderObject, public physics::IPhysicsObject {
     public: 
         Entity();
         Entity(std::pair<int, int> positionXY, std::pair<int, int> widthAndHeight, SDL_Color colour);
@@ -20,9 +21,7 @@ class Entity : public Rend::IRenderObject {
         std::pair<int, int> getPosOfObject();
         std::pair<int, int> getWidthAndhight();
         Rend::RenderType getRenderType();
-        SDL_Color getColour(); 
-        
-
+        SDL_Color getColour();
 
     private:
         std::pair<int, int> m_positionXY;

@@ -23,7 +23,6 @@ namespace Ent {
 
     void Entity::setPoistionXY(pair<int, int> positionXY) 
     {
-        std::cout << "Correct function" << std::endl;
         m_positionXY = positionXY;
     }
     

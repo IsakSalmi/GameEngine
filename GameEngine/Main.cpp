@@ -1,10 +1,15 @@
 #include "Physics/Obstacle.h"
+#include "Utility/Vector2D.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/RenderObject.h"
 #include "Utility/ObjectUtility.h"
 #include "Utility/ObjectUtility.h"
 #include "Entity/Entity.h"
+#include "Physics/PhysicsCalculator.h"
+#include "Physics/IPhysicsObject.h"
 #include <iostream>
+#include <memory>
+#include <chrono>
 
 int main(int argc, char* args[])
 {
@@ -14,25 +19,29 @@ int main(int argc, char* args[])
 
     bool exit = false;
     SDL_Event eventData;
+    physics::PhysicsCalculator physicsCalc = physics::PhysicsCalculator();
 
     std::shared_ptr<Ent::Entity> temp1 = std::make_shared<Ent::Entity>();
     rend.addObjectToRender(temp1);
+    temp1->position = Utility::Vector2D<double>(temp1->getPosOfObject().first, temp1->getPosOfObject().second);
+    temp1->velocity = Utility::Vector2D<double>(0.0, 10.0);
+    temp1->acceleration = Utility::Vector2D<double>(10.0, 10.0);
 
     std::shared_ptr<Ent::Entity> temp2 = std::make_shared<Ent::Entity>();
     temp2->setWidhtAndHeight({30, 500});
     temp2->setPoistionXY({500,50});
-    rend.addObjectToRender(temp2);
+    //rend.addObjectToRender(temp2);
 
     std::shared_ptr<Ent::Entity> temp3 = std::make_shared<Ent::Entity>();
     temp3->setWidhtAndHeight({30, 500});
     temp3->setPoistionXY({0,50});
-    rend.addObjectToRender(temp3);
+    //rend.addObjectToRender(temp3);
 
     bool running = true;
     Uint32 frameStart;
     int frameTime;
     int frameCount = 0;
-    const int FPS = 30;
+    const int FPS = 144.;
     const int frameDelay = 1000 / FPS;
     Uint32 lastTime = SDL_GetTicks();  
     Uint32 fpsTimer = 0;       
@@ -59,26 +68,12 @@ int main(int argc, char* args[])
                 }
             }
         }
-
-        if(utility.checkCollision(temp1->getRect(), temp2->getRect())){
-            dir = -5;
-        }
-        else if (utility.checkCollision(temp1->getRect(), temp3->getRect())) {
-            dir = 5;
-        }
-
-        temp1->moveXY({dir,-1});
-
-        if(utility.checkCollision(temp1->getRect(), temp2->getRect())){
-            dir = -5;
-        }
-        else if (utility.checkCollision(temp1->getRect(), temp3->getRect())) {
-            dir = 5;
-        }
-
-        temp1->moveXY({dir,-1});
         rend.renderObject();
 
+        physicsCalc.calculateTrajectory(temp1, 1./FPS);
+        std::pair<int,int> temp = {temp1->position.getX(), temp1->position.getY()};
+        temp1->setPoistionXY(temp);
+        
         frameTime = SDL_GetTicks() - frameStart;
 
         if (frameDelay > frameTime) {

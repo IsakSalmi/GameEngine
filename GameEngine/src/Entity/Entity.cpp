@@ -61,7 +61,7 @@ namespace Ent {
 
     Rend::RenderType Entity::getRenderType()
     {
-        return Rend::RenderType::Rectangle;
+        return Rend::RenderType::image;
     }
 
     SDL_Color Entity::getColour()

@@ -1,5 +1,5 @@
 #include "Utility/Vector2D.h"
-
+namespace Utility {
 template <typename T>
 Vector2D<T>::Vector2D()= default;
 
@@ -49,4 +49,5 @@ Vector2D<T>& Vector2D<T>::operator+=(const Vector2D& other) {
     m_x += other.m_x;
     m_y += other.m_y;
     return *this;
+}
 }

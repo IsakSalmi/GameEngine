@@ -1,6 +1,6 @@
 #pragma once
 
-
+namespace Utility {
 template <typename T>
 class Vector2D {
 public:
@@ -20,3 +20,4 @@ private:
     T m_x;
     T m_y;
 };
+}

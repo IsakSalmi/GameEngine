@@ -7,8 +7,8 @@ namespace physics {
     {
     public:
         Utility::Vector2D <double> position;
-        Utility::Vector2D <double> vecolity;
-        Utility::Vector2D <double> accelaration;
+        Utility::Vector2D <double> velocity;
+        Utility::Vector2D <double> acceleration;
         double mass;
     private:
 };

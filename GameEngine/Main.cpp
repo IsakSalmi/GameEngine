@@ -2,7 +2,6 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/RenderObject.h"
 #include "Utility/ObjectUtility.h"
-#include "Utility/ObjectUtility.h"
 #include "Entity/Entity.h"
 #include "Entity/EntityManager.h"
 #include <iostream>
@@ -11,6 +10,8 @@ int main(int argc, char* args[])
 {
     Obstacle box = Obstacle(2, 2);
     SDL_Init(SDL_INIT_EVERYTHING);
+
+    Entman::EntityManager entMan = Entman::EntityManager();
     Rend::Renderer rend = Rend::Renderer(1920 ,1080);
 
     bool exit = false;
@@ -18,16 +19,19 @@ int main(int argc, char* args[])
 
     std::shared_ptr<Ent::Entity> temp1 = std::make_shared<Ent::Entity>();
     rend.addObjectToRender(temp1);
+    entMan.addEntity(temp1);
 
     std::shared_ptr<Ent::Entity> temp2 = std::make_shared<Ent::Entity>();
     temp2->setWidhtAndHeight({30, 500});
     temp2->setPoistionXY({500,50});
     rend.addObjectToRender(temp2);
+    entMan.addEntity(temp2);
 
     std::shared_ptr<Ent::Entity> temp3 = std::make_shared<Ent::Entity>();
     temp3->setWidhtAndHeight({30, 500});
     temp3->setPoistionXY({0,50});
     rend.addObjectToRender(temp3);
+    entMan.addEntity(temp3);
 
     bool running = true;
     Uint32 frameStart;
@@ -39,13 +43,9 @@ int main(int argc, char* args[])
     Uint32 fpsTimer = 0;
 
     Utility::ObjectUtility utility;
+
     
-    std::pair<int, int> mittPar = {20, 20};
-    Entman::EntityManager entMan = Entman::EntityManager();
-    // entMan.createEntity(mittPar);
-    entMan.checkAllCollision();
-
-
+    
     int32_t dir = 1;
     while (running)
     {
@@ -67,9 +67,11 @@ int main(int argc, char* args[])
             }
         }
 
-        if(utility.checkCollision(temp1->getRect(), temp2->getRect()) ||
-            utility.checkCollision(temp1->getRect(), temp3->getRect()))
-        {
+        if (entMan.checkAllCollision()) {
+            entMan.printCollidingIndexes();
+
+            std::pair<int,int> ettPar = entMan.getCollisionPairByIndex(0);
+
             dir *= -1;
         }
 

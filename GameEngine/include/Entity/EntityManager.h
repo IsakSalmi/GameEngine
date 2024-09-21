@@ -9,12 +9,11 @@ namespace Entman {
 class EntityManager {
     public: 
         EntityManager() = default;
-
-        void createEntity(std::pair<int, int> positionXY, std::pair<int, int> widthAndHeight, SDL_Color colour);
-        void createEntity(std::pair<int, int> widthAndHeight, SDL_Color colour);
-        void createEntity(std::pair<int, int> widthAndHeight);
-
-        void checkAllCollision();
+        void addEntity(std::shared_ptr<Ent::Entity> newEntity);
+        std::shared_ptr<Ent::Entity> getEntityByIndex(int index);
+        std::pair<int, int> getCollisionPairByIndex(int index);
+        bool checkAllCollision();
+        void printCollidingIndexes();
 
         // getEntity(int id);
 
@@ -23,5 +22,5 @@ class EntityManager {
         
         std::vector<std::shared_ptr<Ent::Entity>> m_allEntities;
         std::vector<std::pair<int, int>> m_collidingEntities;
-    };  
+    };
 } // namespace Ent

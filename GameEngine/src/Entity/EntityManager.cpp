@@ -1,33 +1,27 @@
 #include "EntityManager.h"
 #include "Entity.h"
 
-
-using namespace std;
-
 namespace Entman 
 {
-    void EntityManager::createEntity(pair<int, int> positionXY, pair<int, int> widthAndHeight, SDL_Color colour)
+    using namespace std;
+    void EntityManager::addEntity(std::shared_ptr<Ent::Entity> newEntity)
     {
-        m_allEntities.push_back(std::make_shared<Ent::Entity>(positionXY, widthAndHeight, colour));
+        m_allEntities.push_back(newEntity);
     }
     
-    void EntityManager::createEntity(pair<int, int> widthAndHeight, SDL_Color colour)
+    std::shared_ptr<Ent::Entity> EntityManager::getEntityByIndex(int index) 
     {
-        pair<int, int> positionXY = {0, 0};
-        m_allEntities.push_back(std::make_shared<Ent::Entity>(positionXY, widthAndHeight, colour));
+        return m_allEntities[index];
+    }
+    
+    std::pair<int, int> EntityManager::getCollisionPairByIndex(int index)
+    {
+        return m_collidingEntities[index];
     }
 
-    void EntityManager::createEntity(pair<int, int> widthAndHeight)
+    bool EntityManager::checkAllCollision() 
     {
-        pair<int, int> positionXY = {0, 0};
-        SDL_Color colour = {0, 255, 0, 255};
-        m_allEntities.push_back(std::make_shared<Ent::Entity>(positionXY, widthAndHeight, colour));
-    }
-
-    void EntityManager::checkAllCollision() 
-    {
-        cout << "helo" << endl;
-        /*
+        bool collisionFound = false;
         m_collidingEntities.clear();
         for (int32_t index1 = 0; index1 < m_allEntities.size(); index1++)
         {
@@ -37,11 +31,19 @@ namespace Entman
                 {
                     std::pair<int, int> collidingPair = {index1, index2};
                     m_collidingEntities.push_back(collidingPair);
+                    collisionFound = true;
                 }
             }
         }
-        cout << "Colliding entitites: " << m_collidingEntities.size() << endl;
-        */
+        return collisionFound;
+    }
+
+    void EntityManager::printCollidingIndexes() 
+    {
+        for (size_t i = 0; i < m_collidingEntities.size(); i++)
+        {
+            cout << "Colliding pair indexes: (" << m_collidingEntities[i].first << ", " << m_collidingEntities[i].second << ")" << endl;
+        }
     }
 
 } // namespace Entman

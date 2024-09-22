@@ -34,8 +34,8 @@ namespace Ent {
     
     void Entity::moveXY(int x, int y) 
     {
-        m_positionXY.first = 10;
-        m_positionXY.second = 10;
+        this->m_positionXY.first = x;
+        this->m_positionXY.second = y;
     }
 
     void Entity::setWidhtAndHeight(pair<int, int> widthAndHeight)
@@ -60,7 +60,7 @@ namespace Ent {
 
     Rend::RenderType Entity::getRenderType()
     {
-        return Rend::RenderType::image;
+        return Rend::RenderType::Rectangle;
     }
 
     SDL_Color Entity::getColour()

@@ -1,7 +1,8 @@
 #pragma once 
 #include <iostream>
+#include "Physics/IPhysicsObject.h"
 
-class Obstacle
+class Obstacle : public physics::IPhysicsObject
 {
 public:
     Obstacle(int width, int height);
